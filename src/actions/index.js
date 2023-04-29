@@ -1,0 +1,3 @@
+const GET_CHARACTERS = "GET_CHARACTERS";
+
+export { GET_CHARACTERS };
