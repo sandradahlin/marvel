@@ -1,2 +1,0 @@
-export const PUBLIC_KEY="39c37ddfc3fecc245db8bbe0683646d2"
-const PRIVATE_KEY="ef3b179cb744c1a8d249e67c637d6a5cf0a589df"
