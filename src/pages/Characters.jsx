@@ -6,21 +6,21 @@ import useFetch from "../hooks/useFetch";
 
 function Characters() {
   const [pages, setPages] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   //   `https://gateway.marvel.com:443/v1/public/characters?apikey=39c37ddfc3fecc245db8bbe0683646d2`
   //   const { isLoading, isError, data, total } = useFetch(
   //     "https://gateway.marvel.com:443/v1/public/characters"
-  //   );
-  const offset = 20;
+  // //   );
+  // const offset = 20;
 
-  const nextPage = () => {
-    setCurrentPage((prevState) => {
-      setCurrentPage(prevState + 1);
-    });
-    // make a new fetch call
-    // add loader
-  };
-  const { characters, getCharacters, total, isLoading } =
+  // const nextPage = () => {
+  //   setCurrentPage((prevState) => {
+  //     setCurrentPage(prevState + 1);
+  //   });
+  //   // make a new fetch call
+  //   // add loader
+  // };
+  const { characters, getCharacters, total, isLoading, currentPage } =
     useCharactersContext();
 
   useEffect(() => {
@@ -38,6 +38,7 @@ function Characters() {
     const pages = 5801 / 20;
     setPages(Array.from(Array(Math.ceil(pages)).keys()));
   };
+  
   useEffect(() => {
     paginate(total);
   }, [total]);
@@ -49,6 +50,7 @@ function Characters() {
     <>
       <Hero />
       <p>characters</p>
+      <p>{currentPage}</p>
       {/* {characters?.map((character) => {
         return <span>{character.name}</span>;
       })} */}

@@ -1,12 +1,11 @@
 import React, { useContext, useReducer, useEffect, useCallback } from "react";
 import charactersReducer from "../reducers/charactersReducer";
-import { GET_CHARACTERS, SET_LOADING, SET_LOADING_DONE } from "../actions";
+import { GET_CHARACTERS, SET_LOADING, SET_LOADING_DONE, SET_PAGE } from "../actions";
 import { PUBLIC_KEY } from "../keys";
 import useFetch from "../hooks/useFetch";
 
 const URL = "https://gateway.marvel.com:443/v1/public/characters";
 const CharactersContext = React.createContext();
-console.log(CharactersContext, "con initial");
 
 const initialState = {
   characters: [],
@@ -19,6 +18,9 @@ const initialState = {
 const CharactersContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(charactersReducer, initialState);
 
+  useEffect(() => {
+  }, [state.currentPage])
+
   const fetchData = async () => {
     setIsLoading();
 
@@ -26,7 +28,7 @@ const CharactersContextProvider = ({ children }) => {
       // const res = await fetch(`${URL}?apikey=${PUBLIC_KEY}`);
       // const { data } = await res.json();
       setLoadingDone();
-const data={results: []}
+      const data = { results: [] };
       return data;
     } catch (error) {
       // setIsError(true);
@@ -47,15 +49,17 @@ const data={results: []}
   const setIsLoading = () => {
     dispatch({ type: SET_LOADING });
   };
+
   const setLoadingDone = () => {
     dispatch({ type: SET_LOADING_DONE });
   };
-  // const setLoadingFinished = () => {
-  //   dispatch({ type: SET_LOADING});
-  // }
+
+  const setCurrentPage = (page) => {
+    dispatch({ type: SET_PAGE, payload: page });
+  };
 
   return (
-    <CharactersContext.Provider value={{ ...state, getCharacters }}>
+    <CharactersContext.Provider value={{ ...state, getCharacters, setCurrentPage }}>
       {children}
     </CharactersContext.Provider>
   );
