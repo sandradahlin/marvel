@@ -1,48 +1,49 @@
 import React, { useContext, useReducer, useEffect, useCallback } from "react";
 import charactersReducer from "../reducers/charactersReducer";
-import { GET_CHARACTERS, SET_LOADING, SET_LOADING_DONE, SET_PAGE } from "../actions";
+import {
+  GET_CHARACTERS,
+  SET_LOADING,
+  SET_LOADING_DONE,
+  SET_PAGE,
+  SET_ERROR,
+} from "../actions";
 import { PUBLIC_KEY } from "../keys";
-import useFetch from "../hooks/useFetch";
 
 const URL = "https://gateway.marvel.com:443/v1/public/characters";
 const CharactersContext = React.createContext();
 
 const initialState = {
-  characters: [],
+  data: [],
   total: 0,
   pages: 0,
-  currentPage: 0,
+  currentPage: 1,
   isLoading: true,
+  isError: false,
 };
 
 const CharactersContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(charactersReducer, initialState);
 
-  useEffect(() => {
-  }, [state.currentPage])
-
   const fetchData = async () => {
     setIsLoading();
 
     try {
-      // const res = await fetch(`${URL}?apikey=${PUBLIC_KEY}`);
-      // const { data } = await res.json();
+      const offset = state.currentPage * 20 - 20;
+      const res = await fetch(`${URL}?offset=${offset}&apikey=${PUBLIC_KEY}`);
+      const { data } = await res.json();
+      setData(data);
       setLoadingDone();
-      const data = { results: [] };
-      return data;
     } catch (error) {
-      // setIsError(true);
+      setIsError();
       console.error(error);
     }
   };
-  //   `https://gateway.marvel.com:443/v1/public/characters?apikey=39c37ddfc3fecc245db8bbe0683646d2`
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [fetchData]);
-  //fetch data here
-  const getCharacters = async (offset) => {
-    const data = await fetchData();
+  useEffect(() => {
+    fetchData();
+  }, [state.currentPage]);
+
+  const setData = async (data) => {
     dispatch({ type: GET_CHARACTERS, payload: data });
   };
 
@@ -58,8 +59,12 @@ const CharactersContextProvider = ({ children }) => {
     dispatch({ type: SET_PAGE, payload: page });
   };
 
+  const setIsError = async () => {
+    dispatch({ type: SET_ERROR });
+  };
+
   return (
-    <CharactersContext.Provider value={{ ...state, getCharacters, setCurrentPage }}>
+    <CharactersContext.Provider value={{ ...state, setCurrentPage }}>
       {children}
     </CharactersContext.Provider>
   );

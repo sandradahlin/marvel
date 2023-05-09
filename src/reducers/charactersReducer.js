@@ -3,6 +3,7 @@ import {
   SET_LOADING,
   SET_LOADING_DONE,
   SET_PAGE,
+  SET_ERROR
 } from "../actions";
 const charactersReducer = (state, action) => {
   const { type, payload } = action;

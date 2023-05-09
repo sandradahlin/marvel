@@ -22,10 +22,6 @@ function Pagination({ pages, currentPage }) {
   const handlePages = (next) => {
     const lastPage = next ? currentPages.pop() + 1 : currentPages.shift();
     const newRange = next ? lastPage + 10 : lastPage - 10;
-    console.log(lastPage, "last page");
-    console.log(newRange, "newRange");
-
-
     setCurrentPages(
       next ? pages.slice(lastPage, newRange) : pages.slice(newRange, lastPage)
     );

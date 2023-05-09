@@ -12,11 +12,11 @@ const useFetch = (url, offset = 0) => {
     try {
       setIsLoading(true);
       console.log("useeffect");
-      // const res = await fetch(`${url}?apikey=${PUBLIC_KEY}`)
-      // const data = await res.json();
-
-      // setData(data);
-      // setTotal(data.data.total)
+      const res = await fetch(`${url}?apikey=${PUBLIC_KEY}`)
+      const data = await res.json();
+ console.log(data, "data")
+      setData(data);
+      setTotal(data.data.total)
     } catch (error) {
       setIsError(true);
       console.error(error)
