@@ -6,6 +6,7 @@ import {
   SET_LOADING_DONE,
   SET_PAGE,
   SET_ERROR,
+  SET_PAGE_LOAD,
 } from "../actions";
 import { PUBLIC_KEY } from "../keys";
 
@@ -19,18 +20,24 @@ const initialState = {
   currentPage: 1,
   isLoading: true,
   isError: false,
+  isPageLoading: true,
 };
 
 const CharactersContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(charactersReducer, initialState);
 
   const fetchData = async () => {
-    setIsLoading();
+    if (state.total) {
+      setLoadingAfterPageChange();
+    } else {
+      setIsLoading();
+    }
 
     try {
       const offset = state.currentPage * 20 - 20;
       const res = await fetch(`${URL}?offset=${offset}&apikey=${PUBLIC_KEY}`);
       const { data } = await res.json();
+      console.log(data, "d")
       setData(data);
       setLoadingDone();
     } catch (error) {
@@ -61,6 +68,10 @@ const CharactersContextProvider = ({ children }) => {
 
   const setIsError = async () => {
     dispatch({ type: SET_ERROR });
+  };
+
+  const setLoadingAfterPageChange = async () => {
+    dispatch({ type: SET_PAGE_LOAD });
   };
 
   return (

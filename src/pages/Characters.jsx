@@ -7,7 +7,7 @@ import useFetch from "../hooks/useFetch";
 function Characters() {
   const [pages, setPages] = useState([]);
 
-  const { characters, total, isLoading, currentPage } =
+  const { isPageLoading, total, isLoading, currentPage } =
     useCharactersContext();
 
   const paginate = (total) => {
@@ -27,6 +27,7 @@ function Characters() {
       <Hero />
       <p>characters</p>
       <p>{currentPage}</p>
+      {!isPageLoading && <p>SHOW Characters</p>}
       {/* {characters?.map((character) => {
         return <span>{character.name}</span>;
       })} */}
